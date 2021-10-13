@@ -48,3 +48,16 @@ CREATE TABLE property_reviews (
   rating SMALLINT NOT NULL DEFAULT 0,
   message TEXT
 );
+
+
+SELECT properties.id, properties.title, reservations.start_date, properties.cost_per_night , AVG(property_reviews.rating) as average_rating
+FROM property_reviews
+JOIN reservations ON reservations.id = property_reviews.reservation_id
+JOIN properties ON properties.id = property_reviews.property_id
+JOIN users ON users.id = property_reviews.guest_id
+WHERE property_reviews.guest_id = '1' AND NOW()::date > end_date
+GROUP BY property_reviews.id, reservations.id, properties.id, users.id, properties.title, reservations.start_date
+ORDER BY start_date ASC
+LIMIT 10;
+
+
